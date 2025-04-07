@@ -27,7 +27,7 @@ import {BusLines} from "@/helpers/mapBusTable";
 const store = useStore<RootState>()
 
 const busLines = computed(() => {
-  const busLines = store.getters['stops/busLines'] as BusLines[]
+  const busLines = store.getters['stops/busLines'] as BusLines
 
   return Object.keys(busLines)
 })

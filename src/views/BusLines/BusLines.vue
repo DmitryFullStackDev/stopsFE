@@ -13,7 +13,6 @@
     </NoResultPreview>
 
     <SpecificBusTimeline v-if="shouldShowBusTime"/>
-
   </section>
 
 </template>
@@ -30,5 +29,5 @@ import {computed} from "vue";
 const store = useStore<RootState>()
 
 const shouldShowBusLine = computed(() => store.getters['stops/activeBusLine'] > -1)
-const shouldShowBusTime = computed(() => store.getters['stops/activeBusStop'])
+const shouldShowBusTime = computed(() => store.getters['stops/activeBusStop'] > -1)
 </script>

@@ -16,7 +16,7 @@
           ]"
           :="isClickable ? interactiveAttrs(item) : {}"
       >
-        {{ item }}
+        {{ getItem(item) }}
       </li>
     </ul>
   </div>
@@ -28,13 +28,22 @@ import {defineProps, ref} from 'vue'
 interface Props {
   isClickable?: boolean
   isOverflowAuto?: boolean
-  items: string[]
-  handleClick?: (value: string) => void
+  items: Record<string, string | number>[] | string[]
+  itemKey?: string
+  handleClick?: (value: string | Record<string, string | number>) => void
 }
 
 const props = defineProps<Props>()
 
 const selectedItem = ref(null)
+
+const getItem = (item: Record<string, string | number> | string) => {
+  if (typeof item === "object" && props.itemKey) {
+    return item[props.itemKey];
+  } else {
+    return item;
+  }
+};
 
 const handleSafeClick = (item: string) => {
   if (props.handleClick) {

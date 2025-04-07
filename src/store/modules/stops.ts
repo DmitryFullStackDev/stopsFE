@@ -1,14 +1,15 @@
 import axios from 'axios'
 import {ActionContext, GetterTree} from 'vuex'
 import {RootState} from "@/store";
-import {BusLines, mapBusTable, Stops} from "@/helpers/mapBusTable";
+import {BusLines, mapBusTable, MapBusTableResult, Stops} from "@/helpers/mapBusTable";
 
 export interface StopsState {
-    busLines: BusLines[] | null
+    busLines: BusLines | null
     loading: boolean
     error: string | null
     activeBusLine: number
-    activeBusStop: string | null
+    activeBusStop: number
+    allStops: string[]
 }
 
 const state: StopsState = {
@@ -16,15 +17,17 @@ const state: StopsState = {
     loading: false,
     error: null,
     activeBusLine: -1,
-    activeBusStop: null,
+    activeBusStop: -1,
+    allStops: [],
 }
 
 const mutations = {
     setLoading(state: StopsState, payload: boolean) {
         state.loading = payload
     },
-    setStops(state: StopsState, payload: BusLines[]) {
-        state.busLines = payload
+    setStops(state: StopsState, payload: MapBusTableResult) {
+        state.busLines = payload.busLines
+        state.allStops = payload.allStops
     },
     setError(state: StopsState, error: string | null) {
         state.error = error
@@ -32,7 +35,7 @@ const mutations = {
     setActiveBusLine(state: StopsState, payload: number) {
         state.activeBusLine = payload
     },
-    setActiveBusStop(state: StopsState, payload: string) {
+    setActiveBusStop(state: StopsState, payload: number) {
         state.activeBusStop = payload
     },
 }
@@ -42,13 +45,14 @@ function sleep(ms: number): Promise<void> {
 }
 
 const actions = {
-    async fetchStops({commit}: ActionContext<StopsState, RootState>) {
+    async fetchStops({commit, state}: ActionContext<StopsState, RootState>) {
         commit('setLoading', true)
         commit('setError', null)
         try {
             const response = await axios.get<Stops[]>('http://localhost:3000/stops')
             // await sleep(2000)
-            commit('setStops', mapBusTable(response.data))
+            const result = mapBusTable(response.data)
+            commit('setStops', result)
         } catch (error: any) {
             commit('setError', error.message || 'Error fetching stops')
         } finally {
@@ -64,11 +68,12 @@ const actions = {
 }
 
 const getters: GetterTree<typeof state, RootState> = {
-    busLines: (state: StopsState): BusLines[] | null => state.busLines,
+    busLines: (state: StopsState): BusLines | null => state.busLines,
     loading: (state: StopsState): boolean => state.loading,
     error: (state: StopsState): string | null => state.error,
     activeBusLine: (state: StopsState): number => state.activeBusLine,
-    activeBusStop: (state: StopsState): string | null => state.activeBusStop,
+    activeBusStop: (state: StopsState): number => state.activeBusStop,
+    allStops: (state: StopsState): string[] => state.allStops,
 }
 
 export default {

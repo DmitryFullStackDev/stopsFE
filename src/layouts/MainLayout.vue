@@ -35,7 +35,6 @@ import type {RootState} from '@/store'
 
 const store = useStore<RootState>()
 
-const stops = computed(() => store.getters['stops/stops'])
 const loading = computed(() => store.getters['stops/loading'])
 const error = computed(() => store.getters['stops/error'])
 
