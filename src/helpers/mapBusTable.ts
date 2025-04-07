@@ -16,27 +16,27 @@ export interface BusLines {
 
 interface IntermediateResult {
     [line: number]: {
-        [stop: string]: { order: number; time: string }[];
+        [stop: string]: { order: number; timeInMinutes: number }[];
     };
 }
 
 interface StopsMatrix {
-    [stop: string]: number
+    [stop: string]: number;
 }
 
 export interface MapBusTableResult {
     busLines: BusLines;
-    allStops: string[]
+    allStops: string[];
 }
 
 export const mapBusTable = (input: Stops[]): MapBusTableResult => {
     const intermediate: IntermediateResult = {};
-    const stopsMatrix: StopsMatrix = {}
+    const stopsMatrix: StopsMatrix = {};
 
     for (const {line, stop, order, time} of input) {
-        if (!stopsMatrix[stop]) {
-            stopsMatrix[stop] = 1
-        }
+        const timeInMinutes = time.split(':').map(Number).reduce((hours, minutes) => hours * 60 + minutes);
+
+        stopsMatrix[stop] = 1;
 
         if (!intermediate[line]) {
             intermediate[line] = {};
@@ -46,35 +46,38 @@ export const mapBusTable = (input: Stops[]): MapBusTableResult => {
             intermediate[line][stop] = [];
         }
 
-        intermediate[line][stop].push({order, time});
+        intermediate[line][stop].push({order, timeInMinutes});
     }
 
     const result: BusLines = {};
 
     for (const line in intermediate) {
-        result[+line] = [];
+        const lineNumber = +line;
+        result[lineNumber] = [];
 
-        for (const stop in intermediate[+line]) {
-            const index = intermediate[+line][stop][0].order
-            const time = intermediate[+line][stop]
-                .sort((a, b) => {
-                    const [aHours, aMinutes] = a.time.split(':').map(Number);
-                    const [bHours, bMinutes] = b.time.split(':').map(Number);
-                    return aHours * 60 + aMinutes - (bHours * 60 + bMinutes);
-                })
-                .map(entry => entry.time);
+        for (const stop in intermediate[lineNumber]) {
+            const stopTimes = intermediate[lineNumber][stop];
 
-            result[+line][index] = {
+            const sortedTimes = stopTimes
+                .sort((a, b) => a.timeInMinutes - b.timeInMinutes)  // Sort by time (not order)
+                .map(entry => entry.timeInMinutes);
+
+            const orderIndex = stopTimes[0].order;
+
+            result[lineNumber][orderIndex] = {
                 stop,
-                time,
-            }
+                time: sortedTimes.map(timeInMinutes => {
+                    const hours = Math.floor(timeInMinutes / 60);
+                    const minutes = timeInMinutes % 60;
+                    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+                })
+            };
         }
 
-        result[+line] = result[+line].filter(item => item !== null);
+        result[lineNumber] = result[lineNumber].filter(item => item !== undefined);
     }
 
-    const allStops = Object.keys(stopsMatrix).sort()
+    const allStops = Object.keys(stopsMatrix).sort();
 
-    return {busLines: result, allStops}
-}
-
+    return {busLines: result, allStops};
+};

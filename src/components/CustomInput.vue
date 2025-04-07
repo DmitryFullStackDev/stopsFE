@@ -30,7 +30,7 @@ const emit = defineEmits(['handleSearchChange'])
 const inputValue = ref('')
 
 const debouncedChangeHandler = debounce((newValue: string) => {
-  emit('handleSearchChange', inputValue.value);
+  emit('handleSearchChange', newValue);
 }, 500)
 
 const handleEnter = throttle(() => {
@@ -40,7 +40,6 @@ const handleEnter = throttle(() => {
 watch(inputValue, (newValue) => {
   debouncedChangeHandler(newValue)
 })
-
 </script>
 
 <style scoped>
