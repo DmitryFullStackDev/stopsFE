@@ -1,5 +1,5 @@
 <template>
-  <div ref="boxRef" class="wrapper">
+  <div ref="boxRef" class="position-relative  w-50">
     <svg
         :width="width"
         :height="height"
@@ -15,22 +15,28 @@
       />
     </svg>
 
-    <div class="relative z-10 w-full h-full flex items-center justify-center">
+    <div class="position-absolute top-0 right-0 w-100 h-100">
       <slot/>
     </div>
   </div>
 </template>
 
-<script setup>
-import {computed, onBeforeUnmount, onMounted, ref} from 'vue'
 
-const boxRef = ref(null)
+<script setup lang="ts">
+import {computed, defineProps, onBeforeUnmount, onMounted, ref} from 'vue'
+
+interface Props {
+  isReversed: boolean
+}
+
+const props = defineProps<Props>()
+const boxRef = ref<HTMLDivElement>()
 const width = ref(0)
 const height = 400
 
-const strokeColor = '#8b8e98'
+const strokeColor = '#9A9DA4'
 const strokeWidth = 2
-const borderRadius = 8
+const borderRadius = 4
 
 const x = 1
 const y = 1
@@ -42,6 +48,21 @@ const pathData = computed(() => {
   const right = x + w.value
   const bottom = y + h.value
   const radius = Math.min(r.value, w.value / 2, h.value / 2)
+
+  if (props.isReversed) {
+    return `
+      M${right} ${y + offset.value}
+      L${right} ${y + radius}
+      A${radius} ${radius} 0 0 0 ${right - radius} ${y}
+      L${x + radius} ${y}
+      A${radius} ${radius} 0 0 0 ${x} ${y + radius}
+      L${x} ${bottom - radius}
+      A${radius} ${radius} 0 0 0 ${x + radius} ${bottom}
+      L${right - radius} ${bottom}
+      A${radius} ${radius} 0 0 0 ${right} ${bottom - radius}
+      Z
+    `.replace(/\s+/g, ' ').trim()
+  }
 
   return `
     M${x} ${y + offset.value}
@@ -68,11 +89,13 @@ const [dashArray, offset] = (() => {
     const vertical = h - r
     const perimeter = 2 * (horizontal + vertical) + 4 * arc
 
-    const segment = perimeter / 60
+    const dashCount = Math.floor(perimeter / 50);
+    const dashLength = 20;
+    const gapLength = (perimeter / dashCount) - dashLength;
 
     return {
-      dashArray: `${segment} ${segment}`,
-      offset: segment / 2
+      dashArray: `${dashLength} ${gapLength}`,
+      offset: dashLength / 2
     }
   })
 
@@ -100,10 +123,3 @@ onBeforeUnmount(() => {
 })
 
 </script>
-
-<style>
-.wrapper {
-  width: 100%;
-}
-</style>
-

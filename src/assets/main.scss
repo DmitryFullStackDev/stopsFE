@@ -1,0 +1,110 @@
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+
+$spacer: 1rem;
+$spacers: (
+        0: 0,
+        1: $spacer * .25,
+        2: $spacer * .5,
+        3: $spacer,
+        4: $spacer * 1.5,
+        5: $spacer * 2.5,
+);
+
+// modified bootstrap colors
+$body-bg: #f3f4f9;
+$body-color: #1A1A1A;
+$primary: #0d6efd;
+$gray-100: #F8F8FB;
+$gray-200: #F3F4F9;
+$gray-600: #9A9DA4;
+$gray-800: #33373C;
+$blue-600: #1952E1;
+
+$border-color: $gray-200;
+$list-group-hover-bg: $gray-100;
+$list-group-active-bg: none;
+$list-group-active-color: $blue-600;
+$list-group-color: $gray-800;
+
+$headings-font-weight: 600;
+$font-family-base: 'Inter', sans-serif;
+$h1-font-size: 1.59855rem;
+$h2-font-size: 0.875rem;
+$h3-font-size: 0.75rem;
+$headings-margin-bottom: 0;
+
+$custom-colors: (
+        "custom-grey-500": #63666E
+);
+$theme-colors: map-merge($theme-colors, $custom-colors);
+
+
+$grid-gutter-width: 64px;
+$container-max-widths: (
+        sm: 540px,
+        md: 720px,
+        lg: 960px,
+        xl: 1140px,
+        xxl: calc(1370px + $grid-gutter-width)
+);
+
+$nav-link-font-weight: 500;
+$nav-link-padding-y: 1.25rem;
+$nav-link-padding-x: 1.5rem;
+$nav-link-font-size: 0.875rem;
+$nav-tabs-border-color: transparent;
+$nav-tabs-border-width: 0;
+$nav-tabs-link-active-bg: transparent;
+$nav-link-color: $gray-600;
+$nav-tabs-link-active-color: $gray-800;
+$nav-tabs-border-color: $gray-600;
+$nav-link-hover-color: $gray-800;
+
+$btn-padding-y: 0.5rem;
+$btn-padding-x: 1rem;
+$btn-font-size: 0.75rem;
+$btn-line-height: 1rem;
+$btn-font-weight: 500;
+$btn-box-shadow: none;
+$btn-border-radius: 0.25rem;
+$btn-hover-bg-shade-amount: 10.4%;
+$btn-hover-border-shade-amount: 10.4%;
+$btn-active-bg-shade-amount: 50%; // can not find the exact percent to get exact color as we have in figma
+$btn-active-border-shade-amount: 50%;
+$btn-border-radius: 0.25rem;
+
+$input-height-border: 0;
+$form-floating-height: add(2.5rem, $input-height-border);
+$form-floating-line-height: 0.75rem;
+$form-floating-padding-x: 1rem;
+$form-floating-padding-y: 0.75rem;
+$form-floating-input-padding-t: 0.75rem;
+$form-floating-input-padding-b: 0.75rem;
+$form-floating-label-opacity: 1;
+$form-floating-label-transform: scale(.85) translateY(-1.35rem) translateX(.15rem);
+$input-focus-border-color: $blue-600;
+
+@import 'bootstrap/scss/bootstrap';
+
+.nav-tabs .nav-link.active {
+  border-bottom: 2px solid $blue-600;
+}
+
+h1 {
+  line-height: 1.33;
+}
+
+.fs-7 {
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+}
+
+.fs-8 {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.list-group-item.active:hover {
+  background-color: $gray-100;
+}
