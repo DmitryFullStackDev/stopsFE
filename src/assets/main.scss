@@ -19,6 +19,7 @@ $gray-100: #F8F8FB;
 $gray-200: #F3F4F9;
 $gray-600: #9A9DA4;
 $gray-800: #33373C;
+$blue-550: #07377ff5;
 $blue-600: #1952E1;
 
 $border-color: $gray-200;
@@ -107,4 +108,8 @@ h1 {
 
 .list-group-item.active:hover {
   background-color: $gray-100;
+}
+
+.btn.btn-primary.active:hover {
+  background: $blue-550;
 }

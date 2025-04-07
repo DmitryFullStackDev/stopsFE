@@ -3,11 +3,41 @@
     <h2>Select Bus Line</h2>
 
     <div class="bus-number-grid gap-2 d-grid">
-      <button class="btn btn-primary" type="submit">103</button>
-      <button class="btn btn-primary" type="submit">103</button>
+      <button
+          v-for="item in busLines"
+          class="btn btn-primary"
+          :class="[
+              {active: item === activeBusLine}
+          ]"
+          type="button"
+          :key="item"
+          @click="handleClickChooseNumber(item)"
+      >{{ item }}
+      </button>
     </div>
   </section>
 </template>
+
+<script setup lang="ts">
+import {computed} from 'vue'
+import {useStore} from 'vuex'
+import type {RootState} from '@/store'
+import {BusLines} from "@/helpers/mapBusTable";
+
+const store = useStore<RootState>()
+
+const busLines = computed(() => {
+  const busLines = store.getters['stops/busLines'] as BusLines[]
+
+  return Object.keys(busLines)
+})
+
+const activeBusLine = computed(() => store.getters['stops/activeBusLine'])
+
+const handleClickChooseNumber = (busLine: number) => {
+  store.dispatch('stops/setActiveBusLine', busLine)
+}
+</script>
 
 
 <style scoped>

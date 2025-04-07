@@ -28,27 +28,28 @@ import {defineProps, ref} from 'vue'
 interface Props {
   isClickable?: boolean
   isOverflowAuto?: boolean
+  items: string[]
+  handleClick?: (value: string) => void
 }
 
 const props = defineProps<Props>()
 
-const items = ref(['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 1', 'Item 2', 'Item 3', 'Item 4'])
 const selectedItem = ref(null)
 
-function handleClick(item: any) {
-  selectedItem.value = item
-  alert(`You clicked on: ${item}`)
+const handleSafeClick = (item: string) => {
+  if (props.handleClick) {
+    props.handleClick(item)
+  }
 }
 
-function interactiveAttrs(item: any) {
+function interactiveAttrs(item: string) {
   return {
     role: 'button',
     tabindex: 0,
     'aria-pressed': false,
     'aria-label': 'Click to select ' + item,
-    onClick: () => handleClick(item),
-    onKeydownEnter: () => handleClick(item),
-    onKeydownSpace: () => handleClick(item),
+    onClick: () => handleSafeClick(item),
+    onKeydownEnter: () => handleSafeClick(item),
   }
 }
 </script>
