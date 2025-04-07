@@ -1,10 +1,18 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import {createRouter, createWebHistory, RouteRecordRaw} from 'vue-router'
+import BusLines from "@/views/BusLines/BusLines.vue";
+import BusStops from "@/views/BusStops.vue";
 
-const routes: Array<RouteRecordRaw> = []
+const routes: Array<RouteRecordRaw> = [
+    {path: '/', component: BusLines},
+    {path: '/stops', component: BusStops},
+    {path: '/:pathMatch(.*)*', redirect: '/'}
+]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
+    history: createWebHistory(process.env.BASE_URL),
+    routes,
+    linkActiveClass: 'active'
 })
 
 export default router
+
