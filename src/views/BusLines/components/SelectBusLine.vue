@@ -22,17 +22,22 @@
 import {computed} from 'vue'
 import {useStore} from 'vuex'
 import type {RootState} from '@/store'
-import {BusLines} from "@/helpers/mapBusTable";
+import {StopsState} from "@/store/modules/stops";
 
 const store = useStore<RootState>()
 
 const busLines = computed(() => {
-  const busLines = store.getters['stops/busLines'] as BusLines
+  const busLines = store.getters['stops/busLines'] as StopsState["busLines"]
 
-  return Object.keys(busLines)
+  if (busLines) {
+    return Object.keys(busLines)
+
+  }
+
+  return []
 })
 
-const activeBusLine = computed(() => store.getters['stops/activeBusLine'])
+const activeBusLine = computed(() => store.getters['stops/activeBusLine'] as StopsState["busLines"])
 
 const handleClickChooseNumber = (busLine: number) => {
   store.dispatch('stops/setActiveBusLine', busLine)

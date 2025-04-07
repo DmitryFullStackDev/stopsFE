@@ -34,7 +34,6 @@ const debouncedChangeHandler = debounce((newValue: string) => {
 }, 500)
 
 const handleEnter = throttle(() => {
-  console.log('enter')
   emit('handleSearchChange', inputValue.value);
 }, 500);
 

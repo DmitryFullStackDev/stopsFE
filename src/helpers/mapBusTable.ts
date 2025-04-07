@@ -5,7 +5,7 @@ export interface Stops {
     time: string;
 }
 
-interface Line {
+export interface Line {
     stop: string;
     time: string[];
 }

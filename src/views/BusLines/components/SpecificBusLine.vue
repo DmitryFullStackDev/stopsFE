@@ -15,32 +15,33 @@ import AccessibleList from "@/components/AccessibleList";
 import {useStore} from "vuex";
 import {RootState} from "@/store";
 import {computed} from "vue";
-import {BusLines} from "@/helpers/mapBusTable";
 import OrderButton from "@/components/OrderButton.vue";
 import {useOrderButton} from "@/hooks/useOrderButton";
+import {StopsState} from "@/store/modules/stops";
+import {Stop} from "@/types/common";
 
 const {isDescendingOrder, handleClickChangeOrder} = useOrderButton()
 
 const store = useStore<RootState>();
 
-const activeBusLine = computed(() => store.getters['stops/activeBusLine']);
+const activeBusLine = computed(() => store.getters['stops/activeBusLine'] as StopsState["activeBusLine"]);
 
 const specificBusStops = computed(() => {
-  const active = store.getters['stops/activeBusLine']
-  const busLines = store.getters['stops/busLines'] as BusLines
-  const stops = busLines[active].map((el, index) => ({
-    stop: el.stop,
-    id: index
-  }))
+  const active = store.getters['stops/activeBusLine'] as StopsState["activeBusLine"]
+  const busLines = store.getters['stops/busLines'] as StopsState["busLines"]
+  let stops: Stop[] = []
+
+  if (busLines) {
+    stops = busLines[active].map((el, index) => ({
+      stop: el.stop,
+      id: index
+    }))
+  }
 
   return isDescendingOrder.value ? stops.reverse() : stops
 });
 
-const handleSelectStopClick = ({id}: { id: number, stop: string }) => {
-  const busLines = store.getters['stops/busLines'] as BusLines
-  const activeBusLine = store.getters['stops/activeBusLine']
-  console.log(busLines[activeBusLine][id].time)
-
+const handleSelectStopClick = ({id}: Stop) => {
   store.dispatch('stops/setActiveBusStop', id)
 }
 </script>

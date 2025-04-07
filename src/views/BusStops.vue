@@ -20,21 +20,23 @@ import {useStore} from "vuex";
 import {RootState} from "@/store";
 import {computed, ref} from "vue";
 import {useOrderButton} from "@/hooks/useOrderButton";
+import {StopsState} from "@/store/modules/stops";
 
 const {isDescendingOrder, handleClickChangeOrder} = useOrderButton()
 
 const store = useStore<RootState>();
 const search = ref('')
 
-const handleSearchChange = (message: string) => {
-  search.value = message
-}
-
 const allStops = computed(() => {
-  const stops = store.getters['stops/allStops'].filter(item =>
+  const stops = store.getters['stops/allStops'] as StopsState["allStops"]
+  const filtratedStops = stops.filter(item =>
       item.toLowerCase().includes(search.value.toLowerCase())
   )
 
-  return isDescendingOrder.value ? stops.reverse() : stops
+  return isDescendingOrder.value ? filtratedStops.reverse() : filtratedStops
 });
+
+const handleSearchChange = (message: string) => {
+  search.value = message
+}
 </script>

@@ -105,13 +105,11 @@ const [dashArray, offset] = (() => {
   ]
 })()
 
-
 function updateSize() {
   if (boxRef.value) {
     width.value = +boxRef.value.clientWidth
   }
 }
-
 
 onMounted(() => {
   updateSize()
@@ -121,5 +119,4 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('resize', updateSize)
 })
-
 </script>

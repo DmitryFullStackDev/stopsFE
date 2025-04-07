@@ -32,11 +32,12 @@
 import {computed, onMounted} from 'vue'
 import {useStore} from 'vuex'
 import type {RootState} from '@/store'
+import {StopsState} from "@/store/modules/stops";
 
 const store = useStore<RootState>()
 
-const loading = computed(() => store.getters['stops/loading'])
-const error = computed(() => store.getters['stops/error'])
+const loading = computed(() => store.getters['stops/loading'] as StopsState['loading'])
+const error = computed(() => store.getters['stops/error'] as StopsState['error'])
 
 const shouldShowContent = computed(() => !loading.value && !error.value)
 

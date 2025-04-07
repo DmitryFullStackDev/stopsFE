@@ -25,9 +25,10 @@ import SpecificBusTimeline from "@/views/BusLines/components/SpecificBusTimeline
 import {useStore} from "vuex";
 import {RootState} from "@/store";
 import {computed} from "vue";
+import {StopsState} from "@/store/modules/stops";
 
 const store = useStore<RootState>()
 
-const shouldShowBusLine = computed(() => store.getters['stops/activeBusLine'] > -1)
-const shouldShowBusTime = computed(() => store.getters['stops/activeBusStop'] > -1)
+const shouldShowBusLine = computed(() => store.getters['stops/activeBusLine'] as StopsState['activeBusLine'] > -1)
+const shouldShowBusTime = computed(() => store.getters['stops/activeBusStop'] as StopsState['activeBusStop'] > -1)
 </script>
