@@ -12,7 +12,7 @@
           class="list-group-item border-0 border-top fs-8 rounded-0"
           :class="[
           { 'list-group-item-action': isClickable },
-          { active: selectedItem === item }
+          { active: selectedItem === item.id }
           ]"
           :="isClickable ? interactiveAttrs(item) : {}"
       >
@@ -37,7 +37,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const selectedItem = ref(null)
+const selectedItem = ref<number | string>(-1)
 
 const getItem = (item: Items | string) => {
   if (typeof item === "object" && props.itemKey) {
@@ -50,6 +50,12 @@ const getItem = (item: Items | string) => {
 const handleSafeClick = (item: Items | string) => {
   if (props.handleClick) {
     props.handleClick(item)
+  }
+
+  if (typeof item === 'string') {
+    selectedItem.value = item
+  } else {
+    selectedItem.value = item.id
   }
 }
 
