@@ -12,7 +12,7 @@
           class="list-group-item border-0 border-top fs-8 rounded-0 m-0"
           :class="[
           { 'list-group-item-action': isClickable },
-          { active: selectedItem === item.id }
+          { active: isClickable ? selectedItem === item.id : false }
           ]"
           :="isClickable ? interactiveAttrs(item) : {}"
       >
@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, ref} from 'vue'
+import {defineEmits, defineProps} from 'vue'
 
 type Items = Record<string, string | number>
 
@@ -32,13 +32,12 @@ interface Props {
   isOverflowAuto?: boolean
   items: Items[] | string[]
   itemKey?: string
-  handleClick?: (value: string | Items) => void
+  selectedItem?: number
 }
 
 const props = defineProps<Props>()
-
-const selectedItem = ref<number | string>(-1)
-
+const emit = defineEmits(['handleClick'])
+console.log(props.selectedItem)
 const getItem = (item: Items | string) => {
   if (typeof item === "object" && props.itemKey) {
     return item[props.itemKey];
@@ -48,15 +47,7 @@ const getItem = (item: Items | string) => {
 };
 
 const handleSafeClick = (item: Items | string) => {
-  if (props.handleClick) {
-    props.handleClick(item)
-  }
-
-  if (typeof item === 'string') {
-    selectedItem.value = item
-  } else {
-    selectedItem.value = item.id
-  }
+  emit('handleClick', item);
 }
 
 function interactiveAttrs(item: Items | string) {

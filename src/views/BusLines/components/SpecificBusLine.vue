@@ -5,7 +5,8 @@
       <h3>Bus Stops</h3>
       <OrderButton :isDescendingOrder="isDescendingOrder" :handleClickChangeOrder="handleClickChangeOrder"/>
     </div>
-    <AccessibleList isClickable isOverflowAuto :items="specificBusStops" :handleClick="handleSelectStopClick"
+    <AccessibleList isClickable isOverflowAuto :items="specificBusStops" @handleClick="handleSelectStopClick"
+                    :selectedItem="activeBusStop"
                     itemKey="stop"/>
   </div>
 </template>
@@ -25,6 +26,7 @@ const {isDescendingOrder, handleClickChangeOrder} = useOrderButton()
 const store = useStore<RootState>();
 
 const activeBusLine = computed(() => store.getters['stops/activeBusLine'] as StopsState["activeBusLine"]);
+const activeBusStop = computed(() => store.getters['stops/activeBusStop'] as StopsState["activeBusStop"]);
 
 const specificBusStops = computed(() => {
   const active = store.getters['stops/activeBusLine'] as StopsState["activeBusLine"]
