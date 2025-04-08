@@ -77,30 +77,30 @@ interface Props {
 const props = defineProps<Props>()
 const boxRef = ref<HTMLDivElement>()
 const width = ref(0)
-const height = 400
 
+const height = 400
 const strokeColor = '#9A9DA4'
 const strokeWidth = 2
 const borderRadius = 4
-
+const offset = 20
 const x = 1
 const y = 1
+
 const w = computed(() => width.value - 2)
 const h = computed(() => height - 2)
 const radius = computed(() => Math.min(borderRadius, w.value / 2, h.value / 2))
 const right = computed(() => x + w.value)
-const indentation = computed(() => 2 * offset.value)
+const indentation = computed(() => 2 * offset)
 const bottom = computed(() => y + h.value)
 
-const offset = ref(20)
-const dashArray = `${offset.value} ${offset.value}`
-const dashVerticalArray = `${offset.value} ${offset.value + 2}`
+const dashArray = `${offset} ${offset}`
+const dashVerticalArray = `${offset} ${offset + 2}`
 
 const pathData = computed(() => `
-    M${x} ${y + offset.value}
+    M${x} ${y + offset}
     L${x} ${y + radius.value}
     A${radius.value} ${radius.value} 0 0 1 ${x + radius.value} ${y}
-    L${x + offset.value} ${y}
+    L${x + offset} ${y}
   `)
 
 const pathTopLine = computed(() => `
@@ -124,24 +124,24 @@ const pathRightLine = computed(() => `
   `)
 
 const pathData2 = computed(() => `
-  M${x} ${bottom.value - offset.value}
+  M${x} ${bottom.value - offset}
   L${x} ${bottom.value - radius.value}
   A${radius.value} ${radius.value} 0 0 0 ${x + radius.value} ${bottom.value}
-  L${x + offset.value} ${bottom.value}
+  L${x + offset} ${bottom.value}
   `)
 
 const pathData3 = computed(() => `
-  M${right.value - offset.value} ${y}
+  M${right.value - offset} ${y}
   L${right.value - radius.value} ${y}
   A${radius.value} ${radius.value} 0 0 1 ${right.value} ${y + radius.value}
-  L${right.value} ${y + offset.value}
+  L${right.value} ${y + offset}
   `)
 
 const pathData4 = computed(() => `
-  M${right.value} ${bottom.value - offset.value}
+  M${right.value} ${bottom.value - offset}
   L${right.value} ${bottom.value - radius.value}
   A${radius.value} ${radius.value} 0 0 1 ${right.value - radius.value} ${bottom.value}
-  L${right.value - offset.value} ${bottom.value}
+  L${right.value - offset} ${bottom.value}
   `)
 
 function updateSize() {
