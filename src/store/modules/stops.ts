@@ -34,6 +34,7 @@ const mutations = {
     },
     setActiveBusLine(state: StopsState, payload: number) {
         state.activeBusLine = payload
+        state.activeBusStop = -1
     },
     setActiveBusStop(state: StopsState, payload: number) {
         state.activeBusStop = payload
