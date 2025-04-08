@@ -9,7 +9,7 @@
       <li
           v-for="(item, index) in items"
           :key="index"
-          class="list-group-item border-0 border-top fs-8 rounded-0"
+          class="list-group-item border-0 border-top fs-8 rounded-0 m-0"
           :class="[
           { 'list-group-item-action': isClickable },
           { active: selectedItem === item.id }
