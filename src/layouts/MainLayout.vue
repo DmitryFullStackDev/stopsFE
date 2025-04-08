@@ -10,6 +10,9 @@
         <li class="nav-item">
           <RouterLink class="nav-link" to="/stops">Stops</RouterLink>
         </li>
+        <li class="nav-item">
+          <RouterLink class="nav-link" to="/about">About me</RouterLink>
+        </li>
       </ul>
     </nav>
 
@@ -33,19 +36,30 @@ import {computed, onMounted} from 'vue'
 import {useStore} from 'vuex'
 import type {RootState} from '@/store'
 import {StopsState} from "@/store/modules/stops";
+import {useRoute} from 'vue-router'
 
 const store = useStore<RootState>()
+const route = useRoute()
 
-const loading = computed(() => store.getters['stops/loading'] as StopsState['loading'])
-const error = computed(() => store.getters['stops/error'] as StopsState['error'])
+const needsStopsData = computed(() => route.path === '/' || route.path === '/stops')
 
+const loading = computed(() =>
+    needsStopsData.value ? store.getters['stops/loading'] as StopsState['loading'] : false
+)
+const error = computed(() =>
+    needsStopsData.value ? store.getters['stops/error'] as StopsState['error'] : null
+)
 const shouldShowContent = computed(() => !loading.value && !error.value)
 
 const handleClickReload = () => {
-  store.dispatch('stops/fetchStops')
+  if (needsStopsData.value) {
+    store.dispatch('stops/fetchStops')
+  }
 }
 
 onMounted(() => {
-  store.dispatch('stops/fetchStops')
+  if (needsStopsData.value) {
+    store.dispatch('stops/fetchStops')
+  }
 })
 </script>

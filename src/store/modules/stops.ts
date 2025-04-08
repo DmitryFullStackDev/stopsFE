@@ -51,7 +51,7 @@ const actions = {
         commit('setError', null)
         try {
             const response = await axios.get<Stops[]>('http://localhost:3000/stops')
-            // await sleep(2000)
+            await sleep(2000)
             const result = mapBusTable(response.data)
             commit('setStops', result)
         } catch (error: any) {
