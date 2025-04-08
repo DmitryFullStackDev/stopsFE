@@ -11,7 +11,52 @@
           fill="none"
           :stroke="strokeColor"
           :stroke-width="strokeWidth"
+      />
+      <path
+          :d="pathTopLine"
+          fill="none"
+          :stroke="strokeColor"
+          :stroke-width="strokeWidth"
           :stroke-dasharray="dashArray"
+      />
+      <path
+          :d="pathData2"
+          fill="none"
+          :stroke="strokeColor"
+          :stroke-width="strokeWidth"
+      />
+      <path
+          :d="pathRightLine"
+          fill="none"
+          :stroke="strokeColor"
+          :stroke-width="strokeWidth"
+          :stroke-dasharray="dashVerticalArray"
+      />
+      <path
+          :d="pathData3"
+          fill="none"
+          :stroke="strokeColor"
+          :stroke-width="strokeWidth"
+      />
+      <path
+          :d="pathBottomLine"
+          fill="none"
+          :stroke="strokeColor"
+          :stroke-width="strokeWidth"
+          :stroke-dasharray="dashArray"
+      />
+      <path
+          :d="pathData4"
+          fill="none"
+          :stroke="strokeColor"
+          :stroke-width="strokeWidth"
+      />
+      <path
+          :d="pathLeftLine"
+          fill="none"
+          :stroke="strokeColor"
+          :stroke-width="strokeWidth"
+          :stroke-dasharray="dashVerticalArray"
       />
     </svg>
 
@@ -40,70 +85,64 @@ const borderRadius = 4
 
 const x = 1
 const y = 1
-const w = computed(() => width.value - 3)
+const w = computed(() => width.value - 2)
 const h = computed(() => height - 2)
-const r = computed(() => borderRadius)
+const radius = computed(() => Math.min(borderRadius, w.value / 2, h.value / 2))
+const right = computed(() => x + w.value)
+const indentation = computed(() => 2 * offset.value)
+const bottom = computed(() => y + h.value)
 
-const pathData = computed(() => {
-  const right = x + w.value
-  const bottom = y + h.value
-  const radius = Math.min(r.value, w.value / 2, h.value / 2)
+const offset = ref(20)
+const dashArray = `${offset.value} ${offset.value}`
+const dashVerticalArray = `${offset.value} ${offset.value + 2}`
 
-  if (props.isReversed) {
-    return `
-      M${right} ${y + offset.value}
-      L${right} ${y + radius}
-      A${radius} ${radius} 0 0 0 ${right - radius} ${y}
-      L${x + radius} ${y}
-      A${radius} ${radius} 0 0 0 ${x} ${y + radius}
-      L${x} ${bottom - radius}
-      A${radius} ${radius} 0 0 0 ${x + radius} ${bottom}
-      L${right - radius} ${bottom}
-      A${radius} ${radius} 0 0 0 ${right} ${bottom - radius}
-      Z
-    `.replace(/\s+/g, ' ').trim()
-  }
-
-  return `
+const pathData = computed(() => `
     M${x} ${y + offset.value}
-    L${x} ${y + radius}
-    A${radius} ${radius} 0 0 1 ${x + radius} ${y}
-    L${right - radius} ${y}
-    A${radius} ${radius} 0 0 1 ${right} ${y + radius}
-    L${right} ${bottom - radius}
-    A${radius} ${radius} 0 0 1 ${right - radius} ${bottom}
-    L${x + radius} ${bottom}
-    A${radius} ${radius} 0 0 1 ${x} ${bottom - radius}
-    Z
-  `.replace(/\s+/g, ' ').trim()
-})
+    L${x} ${y + radius.value}
+    A${radius.value} ${radius.value} 0 0 1 ${x + radius.value} ${y}
+    L${x + offset.value} ${y}
+  `)
 
-const [dashArray, offset] = (() => {
-  const computedDash = computed(() => {
-    const r = borderRadius
-    const w = width.value - 3
-    const h = height - 2
+const pathTopLine = computed(() => `
+    M${x + indentation.value} ${y}
+    L${right.value - indentation.value} ${y}
+  `)
 
-    const arc = (Math.PI * r) / 2
-    const horizontal = w - r
-    const vertical = h - r
-    const perimeter = 2 * (horizontal + vertical) + 4 * arc
+const pathBottomLine = computed(() => `
+    M${x + indentation.value} ${bottom.value}
+    L${right.value - indentation.value} ${bottom.value}
+  `)
 
-    const dashCount = Math.floor(perimeter / 50);
-    const dashLength = 20;
-    const gapLength = (perimeter / dashCount) - dashLength;
+const pathLeftLine = computed(() => `
+    M${x} ${y + indentation.value}
+    L${x} ${bottom.value - indentation.value}
+  `)
 
-    return {
-      dashArray: `${dashLength} ${gapLength}`,
-      offset: dashLength / 2
-    }
-  })
+const pathRightLine = computed(() => `
+    M${right.value} ${y + indentation.value}
+    L${right.value} ${bottom.value - indentation.value}
+  `)
 
-  return [
-    computed(() => computedDash.value.dashArray),
-    computed(() => computedDash.value.offset)
-  ]
-})()
+const pathData2 = computed(() => `
+  M${x} ${bottom.value - offset.value}
+  L${x} ${bottom.value - radius.value}
+  A${radius.value} ${radius.value} 0 0 0 ${x + radius.value} ${bottom.value}
+  L${x + offset.value} ${bottom.value}
+  `)
+
+const pathData3 = computed(() => `
+  M${right.value - offset.value} ${y}
+  L${right.value - radius.value} ${y}
+  A${radius.value} ${radius.value} 0 0 1 ${right.value} ${y + radius.value}
+  L${right.value} ${y + offset.value}
+  `)
+
+const pathData4 = computed(() => `
+  M${right.value} ${bottom.value - offset.value}
+  L${right.value} ${bottom.value - radius.value}
+  A${radius.value} ${radius.value} 0 0 1 ${right.value - radius.value} ${bottom.value}
+  L${right.value - offset.value} ${bottom.value}
+  `)
 
 function updateSize() {
   if (boxRef.value) {
