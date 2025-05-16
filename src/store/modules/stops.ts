@@ -50,7 +50,7 @@ const actions = {
         commit('setLoading', true)
         commit('setError', null)
         try {
-            const response = await axios.get<Stops[]>('http://localhost:3000/stops')
+            const response = await axios.get<Stops[]>('https://stops-be-dmitryfullstackdevs-projects.vercel.app/stops')
             await sleep(2000)
             const result = mapBusTable(response.data)
             commit('setStops', result)
