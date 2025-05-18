@@ -17,7 +17,7 @@
 
 ## Required open ports in environment
 `8080` - for the Vue application <br/>
-`3000` - for the API server
+`3000` - for the API server (I've created server https://github.com/DmitryFullStackDev/stopsBE)
 
 ## How to start environment
 1. `npm install` - install dependencies
@@ -26,12 +26,11 @@
 
 ## Assignment
 1. You have to implement simple board for bus stops according to the User Stories and corresponding designs
-2. Directory `docs` contains `openapi` specification for the `api` response - feel free to play with that to check how api was implemented. 
-3. Realization should be as close to the design as possible 
-4. Usage of Typescript is required 
-5. Handling of loading and error states 
-6. Unit tests
-7. Avoid using any other libraries
+2. Realization should be as close to the design as possible 
+3. Usage of Typescript is required 
+4. Handling of loading and error states 
+5. Unit tests
+6. Avoid using any other libraries
 
 ## User stories
 
@@ -59,3 +58,9 @@
       2. Once any search term is entered, "Bus Stops" list should be filtered (https://www.figma.com/file/Dj4FdiwG7uYUqV8ml7xKSL/Interview-Task---Frontend-Dev?type=design&node-id=701-40971&mode=design&t=TTiUnvJpn1Nl7Rgh-4)
    4. User can see listed "Bus Stops". The "Bus Stops" should be sorted in the ascending order
    5. "Bus Stops" should be sortable by clicking on the icon near the title
+
+## Demo
+https://stops-fe.vercel.app/
+
+## Interface
+![Capture](img.png)
